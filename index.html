@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DS Mobile Service </title>
+  <style>
+    /* Base Reset & Typography */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.5; color: #333; background: #f2f4f7; }
+
+    a { text-decoration: none; color: inherit; }
+
+    header { background: #fff; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
+    .header-container { max-width: 1200px; margin: auto; display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-size: 24px; font-weight: bold;color: #0b0b0c; }
+    nav ul { list-style: none; display: flex; gap: 20px; }
+    nav ul li a { font-size: 16px; padding: 8px 12px; transition: background 0.3s, color 0.3s; }
+    nav ul li a:hover { background: #4f46e5; color: white; border-radius: 4px; }
+
+    .hero { background: linear-gradient(135deg, #4f46e5, #9333ea); color: white; text-align: center; padding: 80px 20px; }
+    .hero h1 { font-size: 2.8rem; margin-bottom: 10px; animation: fadeInDown 1s ease-in-out; }
+    .hero p { font-size: 1.2rem; margin-bottom: 20px; opacity: 0.9; }
+
+    @keyframes fadeInDown {
+      0% { transform: translateY(-40px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+
+    /* Services Section */
+    .services-header { text-align: center; font-size: 2rem; margin-bottom: 30px; position: relative; color: #4f46e5; animation: blink 1.8s infinite; }
+    @keyframes blink {
+      0%,50%,100% { opacity: 1; }
+      25%,75% { opacity: 0; }
+    }
+    .services-grid { display: grid; gap: 30px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+    .service-card {
+      background: white; border-radius: 8px; overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .service-card:hover {
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    .service-card img {
+      width: 100%; height: 160px; object-fit: cover;
+    }
+    .service-card-content {
+      padding: 20px;
+    }
+    .service-card-content h3 {
+      font-size: 1.25rem; margin-bottom: 12px; color: #333;
+    }
+    .service-card-content p {
+      font-size: 0.95rem; color: #555; margin-bottom: 10px;
+    }
+    .service-card-content .price {
+      font-weight: bold; color: #4f46e5; font-size: 1.2rem; margin-bottom: 15px;
+    }
+    .service-card-content .btn {
+      display: inline-block; padding: 10px 18px; background: #4f46e5; color: white; border: none; border-radius: 4px; transition: background 0.3s;
+    }
+    .service-card-content .btn:hover {
+      background: #3730a3;
+    }
+
+    /* Features / Why Choose Us Section */
+    .features {
+      display: flex; flex-wrap: wrap; gap: 30px; margin: 60px 0;
+      align-items: center;
+    }
+    .features .feature-img {
+      flex: 1 1 40%; min-width: 300px;
+    }
+    .features .feature-img img { width: 100%; border-radius: 8px; }
+    .features .feature-list {
+      flex: 1 1 55%; min-width: 300px;
+    }
+    .feature-list h2 { font-size: 1.8rem; margin-bottom: 20px; color: #4f46e5; }
+    .feature-list ul { list-style: none; }
+    .feature-list ul li {
+      padding-left: 30px; position: relative; font-size: 1rem; color: #444; margin-bottom: 15px;
+    }
+    .feature-list ul li::before {
+      content: '✔'; position: absolute; left: 0; top: 0; color: #4f46e5;
+      font-size: 1.2rem;
+    }
+
+    /* Booking Form */
+    .booking-form {
+      background: white; padding: 40px 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin: 60px 0;
+    }
+    .booking-form h2 { margin-bottom: 20px; font-size: 2rem; color: #4f46e5; text-align: center; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: #4f46e5; box-shadow: 0 0 5px rgba(79,70,229,0.3);
+      outline: none;
+    }
+    .booking-form .btn-submit {
+      display: block; width: 100%; padding: 14px; background: #4f46e5; color: white; border: none; border-radius: 4px; font-size: 1.1rem;
+      cursor: pointer; transition: background 0.3s;
+    }
+    .booking-form .btn-submit:hover {
+      background: #3730a3;
+    }
+
+    /* Locations Section */
+    .locations {
+      text-align: center; margin-bottom: 60px;
+    }
+    .locations h2 { font-size: 2rem; color: #4f46e5; margin-bottom: 20px; }
+    .locations-list { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+    .locations-list div {
+      background: white; padding: 12px 20px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      font-size: 0.95rem; color: #444;
+      transition: background 0.3s;
+    }
+    .locations-list div:hover { background: #e0e7ff; }
+
+    /* Footer */
+    footer {
+      background: #1f2937; color: #cbd5e1; padding: 40px 20px;
+    }
+    .footer-container { max-width: 1200px; margin: auto; display: flex; flex-wrap: wrap; gap: 40px; }
+    .footer-col { flex: 1 1 200px; }
+    .footer-col h3 { color: white; margin-bottom: 20px; font-size: 1.2rem; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { color: #cbd5e1; font-size: 0.95rem; transition: color 0.3s; }
+    .footer-col ul li a:hover { color: white; }
+    .footer-bottom { text-align: center; margin-top: 30px; font-size: 0.85rem; color: #94a3b8; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .features { flex-direction: column; }
+      .features .feature-img, .features .feature-list { width: 100%; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-container">
+      <div class="logo"><img width="100px"height="100px" src="C:\Users\Ajish\OneDrive\Desktop\my first\download.png" alt="logo"> Mobiles and Services</div>
+      <nav>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#why">Why Us</a></li>
+          <li><a href="#booking">Book Repair</a></li>
+          <li><a href="#locations">Locations</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Repair It Fast. Repair It Right.</h1>
+    <p>Top-notch mobile, laptop & tablet repair services with doorstep convenience and genuine spare parts.</p>
+  </section>
+
+  <div class="container" id="services">
+    <div class="services-header">Our Repair Services</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\1713785846-authorised-phone-repair.avif" alt="Screen Repair">
+        <div class="service-card-content">
+          <h3>Screen Replacement</h3>
+          <p>Cracked or shattered screens replaced with high-quality glass and expert calibration.</p>
+          <div class="price">₹2,999</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\images (2).jfif" alt="Battery Replacement">
+        <div class="service-card-content">
+          <h3>Battery Replacement</h3>
+          <p>Long-lasting batteries with optimized performance and warranty.</p>
+          <div class="price">₹1,499</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\images (1).jfif" alt="Camera Repair">
+        <div class="service-card-content">
+          <h3>Camera Repair</h3>
+          <p>Back/Front camera repair, lens replacement, and expert adjustments.</p>
+          <div class="price">₹1,999</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      <div class="service-card">
+  <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (5).jfif" alt="Speaker & Mic Repair">
+  <div class="service-card-content">
+    <h3>Speaker & Mic Repair</h3>
+    <p>Low sound, distorted audio, or mic not working? Get crystal-clear sound and calling experience back.</p>
+    <div class="price">₹1,199</div>
+    <a href="#booking" class="btn">Book Now</a>
+  </div>
+</div>
+
+<div class="service-card">
+  <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (4).jfif" alt="Back Panel Replacement">
+  <div class="service-card-content">
+    <h3>Back Panel / Body Replacement</h3>
+    <p>Broken or scratched mobile body? We replace with durable, original-quality back panels.</p>
+    <div class="price">₹1,499</div>
+    <a href="#booking" class="btn">Book Now</a>
+  </div>
+</div>
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (1).jfif" alt="Water Damage Repair">
+        <div class="service-card-content">
+          <h3>Water Damage Repair</h3>
+          <p>Quick diagnostics, drying & repair to save your device from water damage.</p>
+          <div class="price">₹2,499</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (3).jfif" alt="Software Repair">
+        <div class="service-card-content">
+          <h3>Software Issues</h3>
+          <p>Lagging, OS crashes, boot problems—we fix them all fast & reliably.</p>
+          <div class="price">₹999</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      
+      <div class="service-card">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (2).jfif" alt="Charging Port Repair">
+        <div class="service-card-content">
+          <h3>Charging Port & Buttons</h3>
+          <p>Charging issues or faulty buttons? We replace ports and restore full functionality.</p>
+          <div class="price">₹1,299</div>
+          <a href="#booking" class="btn">Book Now</a>
+        </div>
+      </div>
+      <div class="service-card">
+  <img src="C:\Users\Ajish\OneDrive\Desktop\my first\images (3).jfif" alt="Smartwatch Repair">
+  <div class="service-card-content">
+    <h3>Smartwatch Repair</h3>
+    <p>Strap replacement, battery change, water damage & display issues fixed for all smartwatch brands.</p>
+    <div class="price">₹1,499</div>
+    <a href="#booking" class="btn">Book Now</a>
+  </div>
+</div>
+
+<div class="service-card">
+  <img src="C:\Users\Ajish\OneDrive\Desktop\my first\images (4).jfif" alt="Laptop Repair">
+  <div class="service-card-content">
+    <h3>Laptop Repair</h3>
+    <p>From screen & keyboard replacements to software and motherboard issues, we handle it all.</p>
+    <div class="price">₹2,999</div>
+    <a href="#booking" class="btn">Book Now</a>
+  </div>
+</div>
+<div class="service-card">
+  <img src="C:\Users\Ajish\OneDrive\Desktop\my first\download (6).jfif" alt="CCTV Installation & Repair">
+  <div class="service-card-content">
+    <h3>CCTV Installation & Repair</h3>
+    <p>Expert CCTV installation, maintenance, and repair to keep your home & office safe and secure.</p>
+    <div class="price">₹3,499</div>
+    <a href="#booking" class="btn">Book Now</a>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <div class="container" id="why">
+    <div class="features">
+      <div class="feature-img">
+        <img src="C:\Users\Ajish\OneDrive\Desktop\my first\istockphoto-871927176-612x612.jpg" alt="Expert Technician">
+      </div>
+      <div class="feature-list">
+        <h2>Why Choose Us</h2>
+        <ul>
+          <li>Free Pickup & Drop service from your doorstep.</li>
+          <li>Expert technicians with years of experience.</li>
+          <li>Genuine spare parts with warranty assurance.</li>
+          <li>1 Month warranty on all repairs.</li>
+          <li>Transparent pricing—no hidden charges.</li>
+          <li>Quick diagnosis at no extra cost.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container booking-form" id="booking">
+    <h2>Book Your Device Repair</h2>
+    <form>
+    <form id="repairForm" onsubmit="return validateForm()">
+  <div class="form-group">
+    <label for="name">Full Name</label>
+    <input type="text" id="name" placeholder="Enter your name" required>
+    <small class="error" id="nameError"></small>
+  </div>
+  <div class="form-group">
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" placeholder="Enter 10-digit phone number" required>
+    <small class="error" id="phoneError"></small>
+  </div>
+  <div class="form-group">
+    <label for="device">Device Type</label>
+    <select id="device" required>
+      <option value="">-- Select Device --</option>
+      <option>Mobile Phone</option>
+      <option>Tablet</option>
+      <option>Laptop</option>
+      <option>Smartwatch</option>
+      <option>CCTV</option>
+    </select>
+    <small class="error" id="deviceError"></small>
+  </div>
+  <div class="form-group">
+    <label for="brand">Brand</label>
+    <input type="text" id="brand" placeholder="Enter brand e.g. Samsung, Apple..." required>
+    <small class="error" id="brandError"></small>
+  </div>
+  <div class="form-group">
+    <label for="model">Model</label>
+    <input type="text" id="model" placeholder="Enter model name/number" required>
+    <small class="error" id="modelError"></small>
+  </div>
+  <div class="form-group">
+    <label for="problem">Describe the Issue</label>
+    <textarea id="problem" placeholder="What’s wrong with your device?" rows="4" required></textarea>
+    <small class="error" id="problemError"></small>
+  </div>
+  <div class="form-group">
+    <label for="date">Preferred Date</label>
+    <input type="date" id="date" required>
+    <small class="error" id="dateError"></small>
+  </div>
+  <button type="submit" class="btn-submit">Submit Repair Request</button>
+</form>
+
+<script>
+function validateForm() {
+  let valid = true;
+
+  // Reset all errors
+  document.querySelectorAll(".error").forEach(el => el.innerText = "");
+
+  // Name validation (only letters & spaces)
+  let name = document.getElementById("name").value.trim();
+  if (!/^[A-Za-z ]+$/.test(name)) {
+    document.getElementById("nameError").innerText = "Name should contain only letters and spaces.";
+    valid = false;
+  }
+
+  // Phone validation (10 digits)
+  let phone = document.getElementById("phone").value.trim();
+  if (!/^[0-9]{10}$/.test(phone)) {
+    document.getElementById("phoneError").innerText = "Phone number must be exactly 10 digits.";
+    valid = false;
+  }
+
+  // Required fields check
+  let fields = ["device", "brand", "model", "problem", "date"];
+  fields.forEach(field => {
+    let value = document.getElementById(field).value.trim();
+    if (value === "") {
+      document.getElementById(field + "Error").innerText = "This field is required.";
+      valid = false;
+    }
+  });
+
+  return valid;
+}
+</script>
+
+<style>
+/* Error message style */
+.error {
+  color: red;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  display: block;
+}
+</style>
+</form>
+  </div>
+
+  <div class="container" id="locations">
+  <div class="locations">
+    <h2>Our Service Areas</h2>
+    <p>We proudly provide doorstep repair services across <strong>all cities and towns in Tamil Nadu</strong>. Wherever you are, we’ll reach you!</p>
+    <div class="locations-list">
+      <div>Chennai</div>
+      <div>Coimbatore</div>
+      <div>Madurai</div>
+      <div>Trichy (Tiruchirappalli)</div>
+      <div>Tirunelveli</div>
+      <div>Salem</div>
+      <div>Erode</div>
+      <div>Vellore</div>
+      <div>Thoothukudi</div>
+      <div>Kanchipuram</div>
+      <div>Kanyakumari (Nagercoil)</div>
+      <div>Dindigul</div>
+      <div>Cuddalore</div>
+      <div>Thanjavur</div>
+      <div>Karur</div>
+      <div>Namakkal</div>
+      <div>Virudhunagar</div>
+      <div>Krishnagiri</div>
+      <div>Ramanathapuram</div>
+      <div>Pudukkottai</div>
+      <div>Nilgiris (Ooty)</div>
+      <div>Sivaganga</div>
+      <div>Perambalur</div>
+      <div>Dharmapuri</div>
+      <div>Tirupattur</div>
+      <div>Ariyalur</div>
+      <div>Tiruvarur</div>
+      <div>Viluppuram</div>
+      <div>Tiruvannamalai</div>
+      <div>Nagapattinam</div>
+    </div>
+  </div>
+</div>
+
+
+  <footer id="contact">
+    <div class="footer-container">
+      <div class="footer-col">
+        <h3>About Us</h3>
+        <p>RepairMyDevice is your trusted repair partner for mobile phones, tablets, laptops and more. We aim to deliver fast, high-quality repairs at affordable prices, with service wherever you are.</p>
+      </div>
+      <div class="footer-col">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#why">Why Us</a></li>
+          <li><a href="#booking">Book Repair</a></li>
+          <li><a href="#locations">Locations</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <ul>
+          <li>📍 123 Repair Street, Your City</li>
+          <li>📞 +91-98765-43210</li>
+          <li>✉ repair@mydevice.com</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2025 RepairMyDevice. All Rights Reserved.</div>
+  </footer>
+
+</body>
+</html>
